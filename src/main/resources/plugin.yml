@@ -1,7 +1,8 @@
 name: LynExp
-version: '1.0-SNAPSHOT'
+version: '${version}'
 main: dev.foksha.lynExp.LynExpPlugin
 api-version: '1.21'
+description: 'Pick your enchantment instead of re-rolling the table. Built for Minecraft ${mcSupported}.'
 
 commands:
   lynexp:
