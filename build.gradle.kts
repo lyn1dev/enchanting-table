@@ -1,55 +1,33 @@
 plugins {
-    kotlin("jvm") version "2.2.0"
-    id("com.gradleup.shadow") version "8.3.0"
-    id("xyz.jpenilla.run-paper") version "2.3.1"
+    kotlin("jvm") version "2.4.10" apply false
+    id("com.gradleup.shadow") version "9.6.1" apply false
 }
 
-group = "dev.foksha"
-version = "1.0-SNAPSHOT"
+allprojects {
+    group = "dev.foksha"
+    version = "1.0.0"
 
-repositories {
-    mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/") {
-        name = "papermc-repo"
-    }
-    maven("https://oss.sonatype.org/content/groups/public/") {
-        name = "sonatype"
-    }
-    maven("https://repo.xenondevs.xyz/releases") {
-        name = "xenon"
+    repositories {
+        mavenCentral()
+        maven("https://repo.papermc.io/repository/maven-public/") { name = "papermc" }
+        maven("https://repo.xenondevs.xyz/releases") { name = "xenondevs" }
     }
 }
 
-dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("xyz.xenondevs.invui:invui:2.0.0-alpha.15") // Inv GUI
-    implementation("xyz.xenondevs.invui:invui-kotlin:2.0.0-alpha.15")
-}
+// Builds every variant jar into build/libs at the repository root.
+val variantPaths = listOf(
+    ":variants:mc-1.21.5-1.21.10",
+    ":variants:mc-1.21.11",
+    ":variants:mc-26.1",
+    ":variants:mc-26.2",
+)
 
-tasks {
-    runServer {
-        // Configure the Minecraft version for our task.
-        // This is the only required configuration besides applying the plugin.
-        // Your plugin's jar (or shadowJar if present) will be used automatically.
-        minecraftVersion("1.21")
+val collectJars by tasks.registering(Copy::class) {
+    group = "build"
+    description = "Builds all Minecraft variant jars and collects them in build/libs."
+    variantPaths.forEach { path ->
+        dependsOn("$path:shadowJar")
+        from(project(path).layout.buildDirectory.dir("libs")) { include("*.jar") }
     }
-}
-
-val targetJavaVersion = 21
-kotlin {
-    jvmToolchain(targetJavaVersion)
-}
-
-tasks.build {
-    dependsOn("shadowJar")
-}
-
-tasks.processResources {
-    val props = mapOf("version" to version)
-    inputs.properties(props)
-    filteringCharset = "UTF-8"
-    filesMatching("plugin.yml") {
-        expand(props)
-    }
+    into(layout.buildDirectory.dir("libs"))
 }
