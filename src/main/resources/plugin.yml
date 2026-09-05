@@ -1,0 +1,25 @@
+name: LynExp
+version: '1.0-SNAPSHOT'
+main: dev.foksha.lynExp.LynExpPlugin
+api-version: '1.21'
+
+commands:
+  lynexp:
+    description: Main LynExp command
+    usage: /<command> [reload]
+    aliases: [lexp, lyn]
+    permission: lynexp.use
+
+permissions:
+  lynexp.use:
+    description: Allows use of basic LynExp commands
+    default: true
+  lynexp.reload:
+    description: Allows reloading of LynExp configuration
+    default: op
+  lynexp.*:
+    description: Gives access to all LynExp permissions
+    default: op
+    children:
+      lynexp.use: true
+      lynexp.reload: true

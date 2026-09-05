@@ -1,0 +1,1 @@
+This plugin adds a vanilla+ enchanting solution, long gone the days of re-rolling the enchantment table for a chance of your desired enchantment. Pick your desired enchantment from a list of enchantments!

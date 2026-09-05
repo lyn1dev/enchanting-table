@@ -1,0 +1,30 @@
+version: 1.0
+
+# LynExp Configuration
+
+# Experience Bottle Configuration
+exp-bottle:
+  # How much experience to consume when right-clicking enchantment table to get exp bottle
+  exp-cost: 5
+  # How many experience levels to consume (alternative to exp-cost)
+  # If both are set, exp-cost will take priority
+  level-cost: 1
+
+# Enchantment Table GUI Configuration
+enchantment-gui:
+  # How many experience points to consume when enchanting from the custom GUI
+  exp-per-enchant: 1395
+  # Whether to show particles when enchanting
+  show-particles: true
+
+item-exp-values:
+  # Format: <minecraft:item> : <exp>
+  rotten_flesh: 2
+  bone: 3
+  spider_eye: 4
+  string: 1
+  gunpowder: 5
+  blaze_rod: 10
+  ender_pearl: 8
+  ghast_tear: 12
+  slime_ball: 6
