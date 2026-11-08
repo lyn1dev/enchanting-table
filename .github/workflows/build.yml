@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # JDK 21 (temurin LTS): variants mc-1.21.5-1.21.10 and mc-1.21.11
+      # compile at jdkVersion 21 (variants/*/build.gradle.kts, "val jdkVersion =
+      # 21"). Variants mc-26.1 and mc-26.2 target jdkVersion 25 and are built
+      # with Gradle toolchains provisioned automatically via the foojay
+      # resolver convention in settings.gradle.kts.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - run: chmod +x ./gradlew
+
+      - run: ./gradlew build --no-daemon --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: enchanting-table-jars
+          path: variants/*/build/libs/*.jar
